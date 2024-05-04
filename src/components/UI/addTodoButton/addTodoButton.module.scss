@@ -1,0 +1,20 @@
+.add-todo-area {
+  display: inline-block;
+}
+
+.add-todo-button {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  box-shadow: 0 0 4px 0 var(--primary-color);
+
+  &:hover {
+    background-color: var(--primary-color-active);
+    border: 2px solid var(--primary-color);
+  }
+}

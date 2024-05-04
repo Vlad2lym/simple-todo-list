@@ -1,0 +1,24 @@
+.custom-button {
+  padding: 10px 22px;
+  background-color: transparent;
+  border: 1px solid #6c63ff;
+  border-radius: 5px;
+  color: #6c63ff;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(108, 99, 255, 0.2);
+  }
+}
+
+.custom-button.primary {
+  background-color: var(--primary-color);
+  color: #f7f7f7;
+
+  &:hover {
+    background-color: var(--primary-color-active);
+  }
+}

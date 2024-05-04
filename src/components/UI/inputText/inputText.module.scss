@@ -1,0 +1,44 @@
+.text-field {
+  position: relative;
+
+  & input {
+    padding-right: 2.7rem;
+  }
+}
+
+.text-field__input {
+  display: block;
+  width: 100%;
+  height: 38px;
+  padding: 8px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-color);
+  background-color: var(--app-bg-color);
+  background-clip: padding-box;
+  border: 1px solid var(--input-border-color);
+  border-radius: 5px;
+
+  &::placeholder {
+    color: var(--placeholder-color);
+  }
+
+  &:focus {
+    outline: 2px solid var(--outline-color);
+  }
+}
+
+.text-field__icon {
+  width: 21px;
+  height: 21px;
+  background-image: var(--search-icon);
+  background-repeat: no-repeat;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 8px;
+  right: 16px;
+  cursor: pointer;
+}

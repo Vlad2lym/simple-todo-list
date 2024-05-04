@@ -1,0 +1,147 @@
+.cancel-btn-wrapper {
+  --cancel-btn-bg-color: #534cc2;
+
+  & > button {
+    width: 123px;
+    height: 38px;
+    padding: 0 8px;
+    border: 2px solid #6c63ff;
+    border-radius: 4px;
+    background-color: var(--cancel-btn-bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    &:hover {
+      --cancel-btn-bg-color: #6c63ff;
+      background-color: var(--cancel-btn-bg-color);
+      box-shadow: 0 0 4px 0 #6c63ff;
+    }
+  }
+}
+
+.cancel-btn-timer {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--cancel-btn-bg-color);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background-color: var(--cancel-btn-bg-color);
+    z-index: 3;
+    animation: mask_left 5s steps(1, end) forwards;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 3;
+    animation: mask_right 5s steps(1, end) forwards;
+  }
+}
+
+.cancel-btn-timer__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: line 5s linear backwards;
+  z-index: 2;
+}
+
+.cancel-btn-timer__line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+}
+
+.cancel-btn-timer__body {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--cancel-btn-bg-color);
+  text-align: center;
+  overflow: hidden;
+  z-index: 4;
+}
+
+.cancel-btn-timer__counter {
+  animation: counter 5s steps(5, end) backwards;
+}
+
+.cancel-btn-timer__counter span {
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+}
+
+@keyframes counter {
+  0% {
+  }
+  100% {
+    transform: translate(0px, -100px);
+  }
+}
+
+@keyframes line {
+  0% {
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mask_left {
+  0% {
+    visibility: visible;
+  }
+  50%,
+  100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes mask_right {
+  0% {
+    visibility: hidden;
+  }
+  50%,
+  100% {
+    visibility: visible;
+  }
+}
+
+.cancel-btn-text {
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
+}

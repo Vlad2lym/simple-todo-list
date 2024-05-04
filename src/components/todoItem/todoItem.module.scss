@@ -1,0 +1,67 @@
+.todo-item {
+  width: 100%;
+}
+
+.todo-item__line {
+  margin: 0 0 17px 0;
+  height: 1px;
+  border: none;
+  background-color: var(--primary-color);
+}
+
+.todo-item__content {
+  margin: 0 0 17px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.todo-item__text {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--text-color);
+  flex: 1 1 auto;
+}
+
+.todo-item__text--done {
+  color: var(--text-color-done);
+  text-decoration: line-through;
+}
+
+.todo-item__checkbox {
+  margin-right: 17px;
+}
+
+.todo-item__options {
+  margin-right: 3px;
+  display: flex;
+  gap: 10px;
+
+  & > button {
+    width: 18px;
+    height: 18px;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center center;
+    cursor: pointer;
+  }
+}
+
+.todo-item__edit-btn {
+  background-image: url('../../assets/icons/edit-icon.svg');
+
+  &:hover {
+    background-image: url('../../assets/icons/edit-active-icon.svg');
+  }
+}
+
+.todo-item__remove-btn {
+  background-image: url('../../assets/icons/delete-icon.svg');
+
+  &:hover {
+    background-image: url('../../assets/icons/delete-active-icon.svg');
+  }
+}

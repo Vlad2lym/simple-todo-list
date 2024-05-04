@@ -1,0 +1,25 @@
+.modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(37, 37, 37, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  transform: scale(0);
+}
+
+.modal.active {
+  transform: scale(1);
+}
+
+.modal__content {
+  width: 500px;
+  height: 289px;
+  padding: 18px 30px;
+  background-color: var(--app-bg-color);
+  border: 1px solid #f7f7f7;
+  border-radius: 16px;
+  margin-top: 118px;
+}

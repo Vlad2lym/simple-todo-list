@@ -1,0 +1,12 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: 'Kanit', sans-serif;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
