@@ -1,39 +1,46 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ITodo } from '../../types/types';
 import styles from './todoItem.module.scss';
 import CustomCheckbox from '../UI/customCheckbox/customCheckbox';
+import Modal from '../UI/modal/modal';
+import EditTodoModal from '../todoModal/editTodoModal';
 
 interface IProps {
   todo: ITodo;
   index: number;
-  toggleTodo: (id: number) => void;
+  toggleTodoById: (id: number) => void;
   editTodo: (todo: ITodo) => void;
   removeTodo: (id: number) => void;
 }
 
-const TodoItem: FC<IProps> = ({ todo, index, toggleTodo, editTodo, removeTodo }) => {
+const TodoItem: FC<IProps> = ({ todo, index, toggleTodoById, editTodo, removeTodo }) => {
+  const [modalActive, setModalActive] = useState(false);
+
+  const onCloseModal = () => {
+    setModalActive(false);
+  };
+
   return (
-    <div className={styles['todo-item']}>
-      <hr style={{ display: index === 0 ? 'none' : 'block' }} className={styles['todo-item__line']} />
-      <span className={styles['todo-item__content']}>
+    <div className={styles.todoItem}>
+      <hr style={{ display: index === 0 ? 'none' : 'block' }} className={styles.todoItemLine} />
+      <span className={styles.todoItemContent}>
         <CustomCheckbox
-          className={styles['todo-item__checkbox']}
+          className={styles.todoItemCheckbox}
           id={todo.id}
           checked={!todo.active}
-          onChange={(id) => toggleTodo(id)}
+          onChange={(id) => toggleTodoById(id)}
         />
-        <p
-          className={
-            todo.active ? styles['todo-item__text'] : `${styles['todo-item__text']} ${styles['todo-item__text--done']}`
-          }
-        >
+        <p className={todo.active ? styles.todoItemText : `${styles.todoItemText} ${styles.todoItemTextDone}`}>
           {todo.title}
         </p>
-        <div className={styles['todo-item__options']}>
-          <button className={styles['todo-item__edit-btn']} onClick={() => editTodo(todo)} />
-          <button className={styles['todo-item__remove-btn']} onClick={() => removeTodo(todo.id)} />
+        <div className={styles.todoItemOptions}>
+          <button className={styles.todoItemEditBtn} onClick={() => setModalActive(true)} />
+          <button className={styles.todoItemRemoveBtn} onClick={() => removeTodo(todo.id)} />
         </div>
       </span>
+      <Modal show={modalActive} onClose={onCloseModal}>
+        <EditTodoModal editedTodo={todo} onCancel={onCloseModal} onApply={editTodo} />
+      </Modal>
     </div>
   );
 };

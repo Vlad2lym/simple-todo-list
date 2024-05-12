@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   transform: scale(0);
+  z-index: 1;
 }
 
 .modal.active {

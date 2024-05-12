@@ -6,7 +6,7 @@ interface IProps {
 }
 
 const DarkModeButton: FC<IProps> = ({ onChange }) => {
-  return <button className={styles['dark-mode-button']} onClick={() => onChange()} />;
+  return <button className={styles.darkModeButton} onClick={() => onChange()} />;
 };
 
 export default DarkModeButton;

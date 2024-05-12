@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import styles from './inputText.module.scss';
 
 interface IProps {
@@ -10,26 +10,20 @@ interface IProps {
 }
 
 const InputText: FC<IProps> = ({ className, placeholder, onChange, value, searched }) => {
-  const [input, setInput] = useState('');
-
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (searched) {
-      setInput(e.target.value);
-    } else {
-      onChange(e.target.value);
-    }
+    onChange(e.target.value);
   };
 
   return (
-    <div className={className ? `${styles['text-field']} ${className}` : styles['text-field']}>
+    <div className={className ? `${styles.textField} ${className}` : styles.textField}>
       <input
-        className={styles['text-field__input']}
+        className={styles.textFieldInput}
         type="text"
         placeholder={placeholder}
         onChange={onChangeHandler}
-        value={searched ? input : value}
+        value={value}
       ></input>
-      {searched && <span className={styles['text-field__icon']} onClick={() => onChange(input)} />}
+      {searched && <span className={styles.textFieldIcon} />}
     </div>
   );
 };

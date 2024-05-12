@@ -9,8 +9,8 @@ interface IProps {
 
 const AddTodoButton: FC<IProps> = ({ className, onClick }) => {
   return (
-    <div className={className ? `${styles['add-todo-area']}} ${className}` : styles['add-todo-area']}>
-      <button className={styles['add-todo-button']} onClick={onClick}>
+    <div className={className ? `${styles.addTodoArea}} ${className}` : styles.addTodoArea}>
+      <button className={styles.addTodoButton} onClick={onClick}>
         <img src={addIcon} />
       </button>
     </div>

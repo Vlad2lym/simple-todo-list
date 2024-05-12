@@ -1,12 +1,12 @@
-export interface ITodo {
-  id: number;
+export interface TodoInfo {
   title: string;
   active: boolean;
 }
 
-export type OpenModalType = 'new' | 'edit';
+export type Todo = Record<string, TodoInfo>;
 
 export interface Option {
   id: number;
-  value: string;
+  title: string;
+  value: any;
 }

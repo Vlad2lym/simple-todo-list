@@ -9,7 +9,7 @@ interface IProps {
 }
 
 const CustomButton: FC<IProps> = ({ children, className, primary, onClick }) => {
-  const buttonStyle = primary ? `${styles['custom-button']} ${styles['primary']}` : `${styles['custom-button']}`;
+  const buttonStyle = primary ? `${styles.customButton} ${styles.primary}` : `${styles.customButton}`;
 
   return (
     <button className={className ? `${buttonStyle} ${className}` : buttonStyle} onClick={onClick}>
