@@ -5,23 +5,34 @@ import TodoItem from '../todoItem/todoItem';
 
 interface IProps {
   todos: Todo;
-  toggleTodoById: (id: number) => void;
-  editTodo: (todo: Todo) => void;
-  removeTodo: (id: number) => void;
+  toggleTodoById: (id: string) => void;
+  openEditTodoModal: (id: string) => void;
+  removeTodo: (id: string) => void;
+  addIdRemovedTodo: (id: string) => void;
+  deleteIdRemovedTodo: (id: string) => void;
 }
 
-const TodoList: FC<IProps> = ({ todos, toggleTodoById, editTodo, removeTodo }) => {
+const TodoList: FC<IProps> = ({
+  todos,
+  toggleTodoById,
+  openEditTodoModal,
+  removeTodo,
+  addIdRemovedTodo,
+  deleteIdRemovedTodo,
+}) => {
   return (
     <div className={styles.todoList}>
-      {Object.keys(todos).length ? (
-        Object.entries(todos).map(([id, todoInfo], index) => (
+      {todos.size ? (
+        [...todos.values()].map((todo, index) => (
           <TodoItem
             key={todo.id}
             todo={todo}
             index={index}
             toggleTodoById={toggleTodoById}
-            editTodo={editTodo}
+            openEditTodoModal={openEditTodoModal}
             removeTodo={removeTodo}
+            addIdRemovedTodo={addIdRemovedTodo}
+            deleteIdRemovedTodo={deleteIdRemovedTodo}
           />
         ))
       ) : (

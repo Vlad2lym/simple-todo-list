@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import './App.scss';
-import Title from './components/title/title';
+import { useEffect, useMemo, useState } from 'react';
+import styles from './App.module.scss';
 import InputText from './components/UI/inputText/inputText';
 import DarkModeButton from './components/UI/darkModeButton/darkModeButton';
 import CustomSelect from './components/UI/customSelect/customSelect';
 import TodoList from './components/todoList/todoList';
 import AddTodoButton from './components/UI/addTodoButton/addTodoButton';
-import Modal from './components/UI/modal/modal';
 import CreateTodoModal from './components/todoModal/createTodoModal';
-import { Todo, Option } from './types/types';
+import { Option, Todo, TodoInfo } from './types/types';
 import CancelRemoveButton from './components/UI/cancelRemoveButton/cancelRemoveButton';
+import EditTodoModal from './components/todoModal/editTodoModal';
+import Header from './components/header/header';
+import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 enum Filters {
   all = 'all',
@@ -23,36 +25,63 @@ const filterOptions: Array<{ value: Filters } & Omit<Option, 'value'>> = [
   { id: 3, title: 'Incomplete', value: Filters.incomplete },
 ];
 
-enum lightMode {
+enum AppMode {
   light = 'light',
   dark = 'dark',
 }
 
-const IS_LIGHT_MODE = 'isLightMode';
+enum removedIdAction {
+  add = 'add',
+  delete = 'delete',
+}
+
+interface removedId {
+  id: string;
+  action: removedIdAction;
+}
+
+const APP_MODE = 'appMode';
 const TODOS = 'todos';
 
 function App() {
-  const [isLightMode, setIsLightMode] = useState<boolean>(JSON.parse(localStorage.getItem(IS_LIGHT_MODE) ?? 'true'));
+  const [appMode, setAppMode] = useState<AppMode>(() => JSON.parse(localStorage.getItem(APP_MODE) ?? '"light"'));
   const [searchNote, setSearchNote] = useState('');
-  const [todos, setTodos] = useState<Todo>(JSON.parse(localStorage.getItem(TODOS) ?? '{}'));
-  const [modalActive, setModalActive] = useState(false);
+  const [todos, setTodos] = useState<Todo>(
+    () => new Map<string, TodoInfo>(Object.entries(JSON.parse(localStorage.getItem(TODOS) ?? '{}'))),
+  );
+  const [idDeleteTodo, setIdDeleteTodo] = useState<string>('');
+  const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
+  const [editedTodo, setEditedTodo] = useState<TodoInfo | null>(null);
   const [filter, setFilter] = useState<Filters>(Filters.all);
-  const [idRemovedTodo, setIdRemovedTodo] = useState(0);
+  const [idRemovedTodo, setIdRemovedTodo] = useState<string[]>([]);
+  const [idRemoved, setIdRemoved] = useState<removedId>();
   const [showCancelRemoveBtn, setShowCancelRemoveBtn] = useState(false);
-  const removeTimeout = useRef<null | number>(null);
+
+  useEffect(() => {
+    if (!idRemoved) {
+      setIdRemovedTodo([]);
+    } else if (idRemoved.action === removedIdAction.add) {
+      setIdRemovedTodo([...idRemovedTodo, idRemoved.id]);
+    } else if (idRemoved.action === removedIdAction.delete) {
+      setIdRemovedTodo(idRemovedTodo.filter((id) => id !== idRemoved.id));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idRemoved]);
 
   const removeFilteredTodos = useMemo(() => {
-    if (idRemovedTodo === 0) {
+    if (!idRemovedTodo.length) {
       return todos;
     }
-    const filteredTodos = todos;
-    delete filteredTodos[idRemovedTodo];
+    const filteredTodos = new Map(todos);
+    idRemovedTodo.forEach((id) => {
+      filteredTodos.delete(id);
+    });
     return filteredTodos;
   }, [idRemovedTodo, todos]);
 
   const onChangeMode = () => {
-    localStorage.setItem(IS_LIGHT_MODE, JSON.stringify(!isLightMode));
-    setIsLightMode((prev) => !prev);
+    localStorage.setItem(APP_MODE, JSON.stringify(appMode === AppMode.light ? AppMode.dark : AppMode.light));
+    setAppMode((prev) => (prev === AppMode.light ? AppMode.dark : AppMode.light));
   };
 
   const onChangeFilter = (option: { value: Filters } & Omit<Option, 'value'>) => {
@@ -63,9 +92,9 @@ function App() {
     if (filter === Filters.all) {
       return removeFilteredTodos;
     } else if (filter === Filters.incomplete) {
-      return removeFilteredTodos.filter((todo) => todo.active);
+      return new Map([...removeFilteredTodos.entries()].filter(([, todoInfo]) => todoInfo.active));
     } else if (filter === Filters.complete) {
-      return removeFilteredTodos.filter((todo) => !todo.active);
+      return new Map([...removeFilteredTodos.entries()].filter(([, todoInfo]) => !todoInfo.active));
     }
 
     return removeFilteredTodos;
@@ -76,104 +105,126 @@ function App() {
       return filteredTodos;
     }
     const lowerSearchNote = searchNote.toLowerCase();
-    return filteredTodos.filter((todo) => todo.title.toLowerCase().includes(lowerSearchNote));
+    return new Map(
+      [...filteredTodos.entries()].filter(([, todoInfo]) => todoInfo.title.toLowerCase().includes(lowerSearchNote)),
+    );
   }, [filteredTodos, searchNote]);
 
   const onChangeSearchNote = (value: string) => {
     setSearchNote(value);
   };
 
-  const onCloseModal = () => {
-    setModalActive(false);
+  const onCloseCreateTodoModal = () => {
+    setShowCreateTodoModal(false);
   };
 
-  const addTodo = (todo: Todo) => {
-    setTodos({ ...todos, ...todo });
+  const onOpenEditTodoModal = (id: string) => {
+    setEditedTodo(todos.get(id) ?? null);
   };
 
-  const editTodo = (editedTodo: Todo) => {
-    const updatedTodoList = todos.map((todo) => {
-      if (editedTodo.id === todo.id) {
-        return editedTodo;
-      }
-      return todo;
-    });
+  const onCloseEditTodoModal = () => {
+    setEditedTodo(null);
+  };
+
+  const createTodo = (todoInfo: TodoInfo) => {
+    const updatedTodoList = new Map(todos);
+    updatedTodoList.set(todoInfo.id, todoInfo);
     setTodos(updatedTodoList);
   };
 
-  const toggleTodoById = (id: number) => {
-    const updatedTodoList = todos.map((todo: ITodo) => {
-      if (todo.id === id) {
-        todo.active = !todo.active;
-      }
-      return todo;
-    });
+  const editTodo = (editedTodo: TodoInfo) => {
+    const updatedTodoList = new Map(todos);
+    updatedTodoList.set(editedTodo.id, editedTodo);
     setTodos(updatedTodoList);
   };
 
-  const removeTodo = (id: number) => {
-    if (removeTimeout.current) {
-      return;
-    }
-    setIdRemovedTodo(id);
-    setShowCancelRemoveBtn(true);
-    const updatedTodoList = todos.filter((todo) => todo.id !== id);
-    removeTimeout.current = setTimeout(() => {
-      setShowCancelRemoveBtn(false);
+  const toggleTodoById = (id: string) => {
+    const updatedTodo = todos.get(id);
+    if (updatedTodo) {
+      updatedTodo.active = !updatedTodo.active;
+      const updatedTodoList = new Map(todos);
+      updatedTodoList.set(updatedTodo.id, updatedTodo);
       setTodos(updatedTodoList);
-      setIdRemovedTodo(0);
-      removeTimeout.current = null;
-    }, 5000);
+    }
+  };
+  const addIdRemovedTodo = (id: string) => {
+    setIdRemoved({ id, action: removedIdAction.add });
   };
 
-  const cancelRemoveTodo = () => {
-    if (removeTimeout.current) {
-      clearTimeout(removeTimeout.current);
-      setShowCancelRemoveBtn(false);
-      setIdRemovedTodo(0);
-      removeTimeout.current = null;
-    }
+  const deleteIdRemovedTodo = (id: string) => {
+    setIdRemoved({ id, action: removedIdAction.delete });
+  };
+
+  const removeTodo = (id: string) => {
+    setIdDeleteTodo(id);
   };
 
   useEffect(() => {
-    localStorage.setItem(TODOS, JSON.stringify(todos));
+    const updatedTodoList = new Map(todos);
+    updatedTodoList.delete(idDeleteTodo);
+    setTodos(updatedTodoList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idDeleteTodo]);
+
+  useEffect(() => {
+    localStorage.setItem(TODOS, JSON.stringify(Object.fromEntries(todos)));
   }, [todos]);
 
   return (
-    <div className={isLightMode ? 'app' : 'app dark-mode'}>
-      <div className="wrapper">
-        <div className="header">
-          <Title className="header__title">TODO LIST</Title>
-          <div className="header__settings">
-            <InputText
-              className="header__input"
-              placeholder="Search note..."
-              value={searchNote}
-              onChange={onChangeSearchNote}
-              searched
-            />
-            <CustomSelect className="header__select" options={filterOptions} onChange={onChangeFilter} />
-            <DarkModeButton onChange={onChangeMode} />
-          </div>
-          <div className="content">
-            <TodoList
-              todos={searchedFilteredTodos}
-              toggleTodoById={toggleTodoById}
-              editTodo={editTodo}
-              removeTodo={removeTodo}
-            />
-            <AddTodoButton className="content__add-button" onClick={() => setModalActive(true)} />
-            <CancelRemoveButton
-              onClick={cancelRemoveTodo}
-              className="content__cancel-remove-button"
-              style={{ display: showCancelRemoveBtn ? 'block' : 'none' }}
-            />
-          </div>
+    <div className={appMode === AppMode.light ? styles.app : `${styles.app} ${styles.darkMode}`}>
+      <div className={styles.wrapper}>
+        <Header titleText="TODO LIST">
+          <InputText
+            className={styles.headerInput}
+            placeholder="Search note..."
+            value={searchNote}
+            onChange={onChangeSearchNote}
+            searched
+          />
+          <CustomSelect className={styles.headerSelect} options={filterOptions} onChange={onChangeFilter} />
+          <DarkModeButton onChange={onChangeMode} />
+        </Header>
+        <div className={styles.content}>
+          <TodoList
+            todos={searchedFilteredTodos}
+            toggleTodoById={toggleTodoById}
+            openEditTodoModal={onOpenEditTodoModal}
+            removeTodo={removeTodo}
+            addIdRemovedTodo={addIdRemovedTodo}
+            deleteIdRemovedTodo={deleteIdRemovedTodo}
+          />
+          <AddTodoButton className={styles.contentAddButton} onClick={() => setShowCreateTodoModal(true)} />
+          <CancelRemoveButton
+            onClick={() => setShowCancelRemoveBtn(false)}
+            className={styles.contentCancelRemoveButton}
+            title="tt"
+            style={{ display: showCancelRemoveBtn ? 'block' : 'none' }}
+          />
+          <ToastContainer
+            className={styles.contentToast}
+            autoClose={5000}
+            closeOnClick
+            position="bottom-center"
+            transition={Bounce}
+            closeButton={false}
+            hideProgressBar
+            pauseOnFocusLoss={false}
+          />
         </div>
       </div>
-      <Modal show={modalActive} onClose={onCloseModal}>
-        <CreateTodoModal onApply={addTodo} onCancel={onCloseModal} />
-      </Modal>
+      <CreateTodoModal
+        onApply={createTodo}
+        onCancel={onCloseCreateTodoModal}
+        order={todos.size + 1}
+        show={showCreateTodoModal}
+      />
+      <EditTodoModal
+        editedTodo={editedTodo}
+        onCancel={onCloseEditTodoModal}
+        onApply={editTodo}
+        show={!!editedTodo}
+        order={todos.size + 1}
+      />
     </div>
   );
 }

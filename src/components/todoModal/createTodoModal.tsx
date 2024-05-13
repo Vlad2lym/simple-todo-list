@@ -3,14 +3,17 @@ import styles from './todoModal.module.scss';
 import Title from '../title/title';
 import InputText from '../UI/inputText/inputText';
 import CustomButton from '../UI/customButton/customButton';
-import { Todo } from '../../types/types';
+import { TodoInfo } from '../../types/types';
+import { v4 as uuidv4 } from 'uuid';
+import Modal, { ModalProps } from '../UI/modal/modal';
 
-interface IProps {
-  onApply: (todo: Todo) => void;
+interface IProps extends Pick<ModalProps, 'show'> {
+  onApply: (todoInfo: TodoInfo) => void;
   onCancel: () => void;
+  order: number;
 }
 
-const CreateTodoModal: FC<IProps> = ({ onApply, onCancel }) => {
+const CreateTodoModal: FC<IProps> = ({ onApply, onCancel, order, show }) => {
   const [titleTodo, setTitleTodo] = useState('');
 
   const onChangeTitleTodo = (value: string) => {
@@ -22,34 +25,36 @@ const CreateTodoModal: FC<IProps> = ({ onApply, onCancel }) => {
       return;
     }
 
-    const todo = {
-      [Date.now().toString()]: {
-        title: titleTodo,
-        active: true,
-      },
+    const todoInfo: TodoInfo = {
+      id: uuidv4(),
+      title: titleTodo,
+      active: true,
+      order: order,
     };
 
-    onApply(todo);
+    onApply(todoInfo);
     setTitleTodo('');
     onCancel();
-  }, [titleTodo, onApply, onCancel]);
+  }, [titleTodo, onApply, onCancel, order]);
 
   return (
-    <div className={styles.todoModal}>
-      <Title className={styles.todoModalTitle}>NEW NOTE</Title>
-      <InputText
-        className={styles.todoModalInput}
-        placeholder="Input your note..."
-        value={titleTodo}
-        onChange={onChangeTitleTodo}
-      />
-      <div className={styles.todoModalButtonsGroup}>
-        <CustomButton onClick={onCancel}>CANCEL</CustomButton>
-        <CustomButton onClick={onFormFinish} primary>
-          APPLY
-        </CustomButton>
+    <Modal show={show} onClose={onCancel}>
+      <div className={styles.todoModal}>
+        <Title className={styles.todoModalTitle}>NEW NOTE</Title>
+        <InputText
+          className={styles.todoModalInput}
+          placeholder="Input your note..."
+          value={titleTodo}
+          onChange={onChangeTitleTodo}
+        />
+        <div className={styles.todoModalButtonsGroup}>
+          <CustomButton onClick={onCancel}>CANCEL</CustomButton>
+          <CustomButton onClick={onFormFinish} primary>
+            APPLY
+          </CustomButton>
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 

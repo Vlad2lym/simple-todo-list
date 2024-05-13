@@ -12,4 +12,5 @@ if (el) {
     </React.StrictMode>,
   );
 } else {
+  console.log('root element not found');
 }
