@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import styles from './darkModeButton.module.scss';
 
 interface IProps {
   onChange: () => void;
 }
 
-const DarkModeButton: FC<IProps> = ({ onChange }) => {
+const DarkModeButton = ({ onChange }: IProps) => {
   return <button className={styles.darkModeButton} onClick={() => onChange()} />;
 };
 

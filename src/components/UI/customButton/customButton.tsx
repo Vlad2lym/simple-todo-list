@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styles from './customButton.module.scss';
 
 interface IProps {
@@ -8,7 +7,7 @@ interface IProps {
   onClick: () => void;
 }
 
-const CustomButton: FC<IProps> = ({ children, className, primary, onClick }) => {
+const CustomButton = ({ children, className, primary, onClick }: IProps) => {
   const buttonStyle = primary ? `${styles.customButton} ${styles.primary}` : `${styles.customButton}`;
 
   return (

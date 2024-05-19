@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styles from './header.module.scss';
 import Title from '../title/title';
 
@@ -8,7 +8,7 @@ interface IProps {
   className?: string;
 }
 
-const Header: FC<IProps> = ({ children, titleText, className }) => {
+const Header = ({ children, titleText, className }: IProps) => {
   return (
     <div className={className}>
       <Title className={styles.headerTitle}>{titleText}</Title>

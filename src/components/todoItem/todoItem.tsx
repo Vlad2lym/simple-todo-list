@@ -1,4 +1,3 @@
-import { FC, useRef } from 'react';
 import { TodoInfo } from '../../types/types';
 import styles from './todoItem.module.scss';
 import CustomCheckbox from '../UI/customCheckbox/customCheckbox';
@@ -11,41 +10,10 @@ interface IProps {
   toggleTodoById: (id: string) => void;
   openEditTodoModal: (id: string) => void;
   removeTodo: (id: string) => void;
-  addIdRemovedTodo: (id: string) => void;
-  deleteIdRemovedTodo: (id: string) => void;
+  cancelRemoveTodo: (id: string) => void;
 }
 
-const TodoItem: FC<IProps> = ({
-  todo,
-  index,
-  toggleTodoById,
-  openEditTodoModal,
-  removeTodo,
-  addIdRemovedTodo,
-  deleteIdRemovedTodo,
-}) => {
-  const removeTimeout = useRef<null | number>(null);
-
-  const removeTodoTimeout = () => {
-    if (removeTimeout.current) {
-      return;
-    }
-    addIdRemovedTodo(todo.id);
-    removeTimeout.current = setTimeout(() => {
-      removeTodo(todo.id);
-      deleteIdRemovedTodo(todo.id);
-      removeTimeout.current = null;
-    }, 5000);
-  };
-
-  const cancelRemoveTodo = () => {
-    if (removeTimeout.current) {
-      clearTimeout(removeTimeout.current);
-      deleteIdRemovedTodo(todo.id);
-      removeTimeout.current = null;
-    }
-  };
-
+const TodoItem = ({ todo, index, toggleTodoById, openEditTodoModal, removeTodo, cancelRemoveTodo }: IProps) => {
   return (
     <div className={styles.todoItem}>
       <hr style={{ display: index === 0 ? 'none' : 'block' }} className={styles.todoItemLine} />
@@ -64,8 +32,8 @@ const TodoItem: FC<IProps> = ({
           <button
             className={styles.todoItemRemoveBtn}
             onClick={() => {
-              removeTodoTimeout();
-              toast(<CancelRemoveButton title={todo.title} onClick={cancelRemoveTodo} />, {
+              removeTodo(todo.id);
+              toast(<CancelRemoveButton title={todo.title} onClick={() => cancelRemoveTodo(todo.id)} />, {
                 hideProgressBar: true,
               });
             }}

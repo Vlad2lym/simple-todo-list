@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styles from './inputText.module.scss';
 
 interface IProps {
@@ -9,7 +8,7 @@ interface IProps {
   searched?: boolean;
 }
 
-const InputText: FC<IProps> = ({ className, placeholder, onChange, value, searched }) => {
+const InputText = ({ className, placeholder, onChange, value, searched }: IProps) => {
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };

@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styles from './modal.module.scss';
 
 export interface ModalProps {
@@ -7,7 +6,7 @@ export interface ModalProps {
   children: React.ReactNode;
 }
 
-const Modal: FC<ModalProps> = ({ show, onClose, children }) => {
+const Modal = ({ show, onClose, children }: ModalProps) => {
   return (
     <div className={show ? `${styles.modal} ${styles.active}` : styles.modal} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>

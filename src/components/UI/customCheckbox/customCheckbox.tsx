@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styles from './customCheckbox.module.scss';
 
 interface IProps {
@@ -8,7 +7,7 @@ interface IProps {
   className?: string;
 }
 
-const CustomCheckbox: FC<IProps> = ({ id, checked, onChange, className }) => {
+const CustomCheckbox = ({ id, checked, onChange, className }: IProps) => {
   return (
     <div className={className ? `${styles.wrapper} ${className}` : styles.wrapper}>
       <input className={styles.checkbox} type="checkbox" id={id} checked={checked} onChange={() => onChange(id)} />

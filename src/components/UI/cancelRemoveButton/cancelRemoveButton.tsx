@@ -1,14 +1,13 @@
-import { FC } from 'react';
 import styles from './cancelRemoveButton.module.scss';
 
 interface IProps {
   className?: string;
-  style?: Object;
+  style?: Record<string, string>;
   onClick: () => void;
   title: string;
 }
 
-const CancelRemoveButton: FC<IProps> = ({ className, onClick, style, title }) => {
+const CancelRemoveButton = ({ className, onClick, style, title }: IProps) => {
   return (
     <div className={className ? `${styles.cancelBtnWrapper} ${className}` : styles.cancelBtnWrapper} style={style}>
       <button onClick={onClick}>

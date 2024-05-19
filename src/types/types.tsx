@@ -5,7 +5,7 @@ export interface TodoInfo {
   order: number;
 }
 
-export type Todo = Map<string, TodoInfo>;
+export type Todo = Record<string, TodoInfo>;
 
 export interface Option {
   id: number;

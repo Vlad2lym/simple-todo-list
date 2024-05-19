@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './customSelect.module.scss';
 import arrowDown from '../../../assets/icons/arrow-down-icon.svg';
 import arrowUp from '../../../assets/icons/arrow-up-icon.svg';
@@ -10,7 +10,7 @@ interface IProps {
   onChange: (value: Option) => void;
 }
 
-const CustomSelect: FC<IProps> = ({ className, options, onChange }) => {
+const CustomSelect = ({ className, options, onChange }: IProps) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const [currentItem, setCurrentItem] = useState<Option>(options.length ? options[0] : { id: 0, title: '', value: '' });
