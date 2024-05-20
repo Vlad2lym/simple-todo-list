@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import styles from './todoModal.module.scss';
-import InputText from '../UI/inputText/inputText';
+import { useCallback, useState } from 'react';
 import { TodoInfo } from '../../types/types';
 import { v4 as uuidv4 } from 'uuid';
 import Modal, { ModalProps } from '../UI/modal/modal';
-import LayoutTodoModal from './layoutTodoModal';
+import TodoForm from '../todoForm/todoForm';
 
 interface IProps extends Pick<ModalProps, 'show'> {
   onApply: (todoInfo: TodoInfo) => void;
@@ -15,10 +13,6 @@ interface IProps extends Pick<ModalProps, 'show'> {
 
 const EditTodoModal = ({ onApply, onCancel, editedTodo, show, order }: IProps) => {
   const [titleTodo, setTitleTodo] = useState(editedTodo?.title ?? '');
-
-  useEffect(() => {
-    setTitleTodo(editedTodo?.title ?? '');
-  }, [editedTodo]);
 
   const onChangeTitleTodo = (value: string) => {
     setTitleTodo(value);
@@ -42,14 +36,13 @@ const EditTodoModal = ({ onApply, onCancel, editedTodo, show, order }: IProps) =
 
   return (
     <Modal onClose={onCancel} show={show}>
-      <LayoutTodoModal title="EDIT NOTE" onCancel={onCancel} onApply={onFormFinish}>
-        <InputText
-          className={styles.todoModalInput}
-          placeholder="Input your note..."
-          value={titleTodo}
-          onChange={onChangeTitleTodo}
-        />
-      </LayoutTodoModal>
+      <TodoForm
+        title="EDIT NOTE"
+        onCancel={onCancel}
+        onApply={onFormFinish}
+        inputValue={titleTodo}
+        onChangeInput={onChangeTitleTodo}
+      />
     </Modal>
   );
 };

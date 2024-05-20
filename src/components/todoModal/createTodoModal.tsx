@@ -1,10 +1,8 @@
 import { useCallback, useState } from 'react';
-import styles from './todoModal.module.scss';
-import InputText from '../UI/inputText/inputText';
 import { TodoInfo } from '../../types/types';
 import { v4 as uuidv4 } from 'uuid';
 import Modal, { ModalProps } from '../UI/modal/modal';
-import LayoutTodoModal from './layoutTodoModal';
+import TodoForm from '../todoForm/todoForm';
 
 interface IProps extends Pick<ModalProps, 'show'> {
   onApply: (todoInfo: TodoInfo) => void;
@@ -38,14 +36,13 @@ const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
 
   return (
     <Modal show={show} onClose={onCancel}>
-      <LayoutTodoModal title="NEW NOTE" onCancel={onCancel} onApply={onFormFinish}>
-        <InputText
-          className={styles.todoModalInput}
-          placeholder="Input your note..."
-          value={titleTodo}
-          onChange={onChangeTitleTodo}
-        />
-      </LayoutTodoModal>
+      <TodoForm
+        title="NEW NOTE"
+        onCancel={onCancel}
+        onApply={onFormFinish}
+        inputValue={titleTodo}
+        onChangeInput={onChangeTitleTodo}
+      />
     </Modal>
   );
 };

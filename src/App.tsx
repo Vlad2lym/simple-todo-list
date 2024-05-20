@@ -50,17 +50,21 @@ function App() {
     setFilter(Filters[option.value]);
   };
 
+  const todosSortByOrder = useMemo(() => {
+    return Object.fromEntries(Object.entries(todos).sort((a, b) => a[1].order - b[1].order));
+  }, [todos]);
+
   const filteredTodos = useMemo(() => {
     if (filter === Filters.all) {
-      return todos;
+      return todosSortByOrder;
     } else if (filter === Filters.incomplete) {
-      return Object.fromEntries(Object.entries(todos).filter(([, todoInfo]) => todoInfo.active));
+      return Object.fromEntries(Object.entries(todosSortByOrder).filter(([, todoInfo]) => todoInfo.active));
     } else if (filter === Filters.complete) {
-      return Object.fromEntries(Object.entries(todos).filter(([, todoInfo]) => !todoInfo.active));
+      return Object.fromEntries(Object.entries(todosSortByOrder).filter(([, todoInfo]) => !todoInfo.active));
     }
 
-    return todos;
-  }, [filter, todos]);
+    return todosSortByOrder;
+  }, [filter, todosSortByOrder]);
 
   const searchedFilteredTodos = useMemo(() => {
     if (!searchNote) {
@@ -123,7 +127,7 @@ function App() {
   const cancelRemoveTodo = (id: string) => {
     const restoredTodoInfo = todos[id];
     if (restoredTodoInfo) {
-      setTodos({ ...todos, [id]: restoredTodoInfo });
+      setTodos((prev) => ({ ...prev, [id]: restoredTodoInfo }));
       const updatedRemoveTodoList = { ...removedTodos };
       delete updatedRemoveTodoList[id];
       setRemovedTodos(updatedRemoveTodoList);
@@ -179,6 +183,7 @@ function App() {
         onApply={editTodo}
         show={!!editedTodo}
         order={lastOrder + 1}
+        key={editedTodo?.id}
       />
     </div>
   );
