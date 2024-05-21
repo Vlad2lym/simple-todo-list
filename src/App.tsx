@@ -182,7 +182,6 @@ function App() {
         onCancel={onCloseEditTodoModal}
         onApply={editTodo}
         show={!!editedTodo}
-        order={lastOrder + 1}
         key={editedTodo?.id}
       />
     </div>

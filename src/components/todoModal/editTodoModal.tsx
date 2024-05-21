@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import { TodoInfo } from '../../types/types';
-import { v4 as uuidv4 } from 'uuid';
 import Modal, { ModalProps } from '../UI/modal/modal';
 import TodoForm from '../todoForm/todoForm';
 
@@ -8,10 +7,9 @@ interface IProps extends Pick<ModalProps, 'show'> {
   onApply: (todoInfo: TodoInfo) => void;
   onCancel: () => void;
   editedTodo: TodoInfo | null;
-  order: number;
 }
 
-const EditTodoModal = ({ onApply, onCancel, editedTodo, show, order }: IProps) => {
+const EditTodoModal = ({ onApply, onCancel, editedTodo, show }: IProps) => {
   const [titleTodo, setTitleTodo] = useState(editedTodo?.title ?? '');
 
   const onChangeTitleTodo = (value: string) => {
@@ -24,15 +22,15 @@ const EditTodoModal = ({ onApply, onCancel, editedTodo, show, order }: IProps) =
     }
 
     const todo: TodoInfo = {
-      id: editedTodo?.id ?? uuidv4(),
+      id: editedTodo.id,
       title: titleTodo,
-      active: editedTodo?.active ?? true,
-      order: editedTodo?.order ?? order,
+      active: editedTodo.active,
+      order: editedTodo.order,
     };
 
     onApply(todo);
     onCancel();
-  }, [titleTodo, onApply, onCancel, editedTodo, order]);
+  }, [titleTodo, onApply, onCancel, editedTodo]);
 
   return (
     <Modal onClose={onCancel} show={show}>
