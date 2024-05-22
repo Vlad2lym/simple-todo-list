@@ -1,33 +1,34 @@
-import { FC } from 'react';
-import { ITodo } from '../../types/types';
+import { Todo } from '../../types/types';
 import styles from './todoList.module.scss';
 import TodoItem from '../todoItem/todoItem';
 
 interface IProps {
-  todos: ITodo[];
-  toggleTodo: (id: number) => void;
-  editTodo: (todo: ITodo) => void;
-  removeTodo: (id: number) => void;
+  todos: Todo;
+  toggleTodoById: (id: string) => void;
+  openEditTodoModal: (id: string) => void;
+  removeTodo: (id: string) => void;
+  cancelRemoveTodo: (id: string) => void;
 }
 
-const TodoList: FC<IProps> = ({ todos, toggleTodo, editTodo, removeTodo }) => {
+const TodoList = ({ todos, toggleTodoById, openEditTodoModal, removeTodo, cancelRemoveTodo }: IProps) => {
   return (
-    <div className={styles['todo-list']}>
-      {todos.length ? (
-        todos.map((todo, index) => (
+    <div className={styles.todoList}>
+      {Object.keys(todos).length ? (
+        Object.values(todos).map((todo, index) => (
           <TodoItem
             key={todo.id}
             todo={todo}
             index={index}
-            toggleTodo={toggleTodo}
-            editTodo={editTodo}
+            toggleTodoById={toggleTodoById}
+            openEditTodoModal={openEditTodoModal}
             removeTodo={removeTodo}
+            cancelRemoveTodo={cancelRemoveTodo}
           />
         ))
       ) : (
-        <div className={styles['empty-list']}>
-          <div className={styles['empty-list__img']} />
-          <h2 className={styles['empty-list__text']}>Empty…</h2>
+        <div className={styles.emptyList}>
+          <div className={styles.emptyListImg} />
+          <h2 className={styles.emptyListText}>Empty…</h2>
         </div>
       )}
     </div>

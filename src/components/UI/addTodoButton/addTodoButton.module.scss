@@ -12,6 +12,7 @@
   border-radius: 50%;
   background-color: var(--primary-color);
   box-shadow: 0 0 4px 0 var(--primary-color);
+  cursor: pointer;
 
   &:hover {
     background-color: var(--primary-color-active);

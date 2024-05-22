@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styles from './title.module.scss';
 
 interface IProps {
@@ -6,8 +5,12 @@ interface IProps {
   className?: string;
 }
 
-const Title: FC<IProps> = ({ children, className }) => {
-  return <h1 className={className ? `${styles.title} + ${className}` : styles.title}>{children}</h1>;
+const Title = ({ children, className }: IProps) => {
+  return (
+    <div className={className}>
+      <h1 className={styles.title}>{children}</h1>
+    </div>
+  );
 };
 
 export default Title;

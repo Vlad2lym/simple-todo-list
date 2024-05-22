@@ -1,19 +1,15 @@
-import { FC } from 'react';
 import styles from './modal.module.scss';
 
-interface IProps {
-  modalActive: boolean;
-  setModalActive: (value: boolean) => void;
+export interface ModalProps {
+  show: boolean;
+  onClose: () => void;
   children: React.ReactNode;
 }
 
-const Modal: FC<IProps> = ({ modalActive, setModalActive, children }) => {
+const Modal = ({ show, onClose, children }: ModalProps) => {
   return (
-    <div
-      className={modalActive ? `${styles.modal} ${styles.active}` : styles.modal}
-      onClick={() => setModalActive(false)}
-    >
-      <div className={styles['modal__content']} onClick={(e) => e.stopPropagation()}>
+    <div className={show ? `${styles.modal} ${styles.active}` : styles.modal} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>

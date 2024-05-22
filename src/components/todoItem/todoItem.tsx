@@ -1,37 +1,43 @@
-import { FC } from 'react';
-import { ITodo } from '../../types/types';
+import { TodoInfo } from '../../types/types';
 import styles from './todoItem.module.scss';
 import CustomCheckbox from '../UI/customCheckbox/customCheckbox';
+import { toast } from 'react-toastify';
+import CancelRemoveButton from '../UI/cancelRemoveButton/cancelRemoveButton';
 
 interface IProps {
-  todo: ITodo;
+  todo: TodoInfo;
   index: number;
-  toggleTodo: (id: number) => void;
-  editTodo: (todo: ITodo) => void;
-  removeTodo: (id: number) => void;
+  toggleTodoById: (id: string) => void;
+  openEditTodoModal: (id: string) => void;
+  removeTodo: (id: string) => void;
+  cancelRemoveTodo: (id: string) => void;
 }
 
-const TodoItem: FC<IProps> = ({ todo, index, toggleTodo, editTodo, removeTodo }) => {
+const TodoItem = ({ todo, index, toggleTodoById, openEditTodoModal, removeTodo, cancelRemoveTodo }: IProps) => {
   return (
-    <div className={styles['todo-item']}>
-      <hr style={{ display: index === 0 ? 'none' : 'block' }} className={styles['todo-item__line']} />
-      <span className={styles['todo-item__content']}>
+    <div className={styles.todoItem}>
+      <hr style={{ display: index === 0 ? 'none' : 'block' }} className={styles.todoItemLine} />
+      <span className={styles.todoItemContent}>
         <CustomCheckbox
-          className={styles['todo-item__checkbox']}
+          className={styles.todoItemCheckbox}
           id={todo.id}
           checked={!todo.active}
-          onChange={(id) => toggleTodo(id)}
+          onChange={(id) => toggleTodoById(id)}
         />
-        <p
-          className={
-            todo.active ? styles['todo-item__text'] : `${styles['todo-item__text']} ${styles['todo-item__text--done']}`
-          }
-        >
+        <p className={todo.active ? styles.todoItemText : `${styles.todoItemText} ${styles.todoItemTextDone}`}>
           {todo.title}
         </p>
-        <div className={styles['todo-item__options']}>
-          <button className={styles['todo-item__edit-btn']} onClick={() => editTodo(todo)} />
-          <button className={styles['todo-item__remove-btn']} onClick={() => removeTodo(todo.id)} />
+        <div className={styles.todoItemOptions}>
+          <button className={styles.todoItemEditBtn} onClick={() => openEditTodoModal(todo.id)} />
+          <button
+            className={styles.todoItemRemoveBtn}
+            onClick={() => {
+              removeTodo(todo.id);
+              toast(<CancelRemoveButton title={todo.title} onClick={() => cancelRemoveTodo(todo.id)} />, {
+                hideProgressBar: true,
+              });
+            }}
+          />
         </div>
       </span>
     </div>
