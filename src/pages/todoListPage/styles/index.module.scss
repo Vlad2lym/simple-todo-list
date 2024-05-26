@@ -1,0 +1,40 @@
+.wrapper {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.header__input {
+  width: 595px;
+}
+
+.header__select {
+  width: 93px;
+  height: 38px;
+}
+
+.content {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content__toast {
+  --toastify-color-light: transparent;
+  & > div {
+    box-shadow: none;
+    padding: 0;
+    --toastify-toast-min-height: min-content;
+
+    & > div {
+      padding: 0;
+    }
+  }
+}
+
+.content__add-button {
+  position: fixed;
+  bottom: 32px;
+  align-self: flex-end;
+  margin-right: 8px;
+}
