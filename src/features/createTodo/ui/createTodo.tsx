@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Modal, ModalProps } from '../../shared/ui/modal';
-import { TodoForm } from '../../widgets/todoForm';
-import { TodoInfo } from '../../shared/api';
+import { Modal, ModalProps } from '../../../shared/ui/modal';
+import { TodoForm } from '../../../widgets/todoForm';
+import { TodoInfo } from '../../../shared/api';
 
 interface IProps extends Pick<ModalProps, 'show'> {
   onApply: (todoInfo: TodoInfo) => void;
@@ -10,7 +10,7 @@ interface IProps extends Pick<ModalProps, 'show'> {
   order: number;
 }
 
-const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
+export const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
   const [titleTodo, setTitleTodo] = useState('');
 
   const onChangeTitleTodo = (value: string) => {
@@ -46,5 +46,3 @@ const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
     </Modal>
   );
 };
-
-export default CreateTodoModal;

@@ -1,40 +1,38 @@
 import { useMemo, useState } from 'react';
-import CreateTodoModal from '../../features/createTodo';
-import EditTodoModal from '../../features/editTodo';
-import styles from './styles/index.module.scss';
-import { useStateWithLocalStorage } from '../../shared/lib';
+import { CreateTodoModal } from '../../features/createTodo';
+import { EditTodoModal } from '../../features/editTodo';
+import styles from './styles/todoListPage.module.scss';
 import { Header } from '../../widgets/header';
-import { AddTodoButton } from '../../shared/ui/addTodoButton';
 import { Option } from '../../shared/api';
 import { CustomSelect } from '../../shared/ui/customSelect';
-import { DarkModeButton } from '../../shared/ui/darkModeButton';
 import { InputText } from '../../shared/ui/inputText';
-import { ToastProvider } from '../../shared/ui/toastProvider';
 import { TodoList } from '../../widgets/todoList';
 import { Todo, TodoInfo } from '../../shared/api';
+import { ToastProvider } from '../../features/toastProvider';
+import { DarkModeButton } from '../../features/darkModeButton';
+import { AddTodoButton } from '../../features/addTodoButton';
+import { Filters, filterOptions } from './api';
 
 interface IProps {
   onChangeMode: () => void;
+  todos: Todo;
+  createTodo: (todoInfo: TodoInfo) => void;
+  editTodo: (editedTodo: TodoInfo) => void;
+  toggleTodoById: (id: string) => void;
+  removeTodo: (id: string) => void;
+  cancelRemoveTodo: (id: string) => void;
 }
 
-const TODOS = 'todos';
-
-enum Filters {
-  all = 'all',
-  complete = 'complete',
-  incomplete = 'incomplete',
-}
-
-const filterOptions: Array<{ value: Filters } & Omit<Option, 'value'>> = [
-  { id: 1, title: 'ALL', value: Filters.all },
-  { id: 2, title: 'Complete', value: Filters.complete },
-  { id: 3, title: 'Incomplete', value: Filters.incomplete },
-];
-
-export const TodoListPage = ({ onChangeMode }: IProps) => {
+export const TodoListPage = ({
+  onChangeMode,
+  todos,
+  createTodo,
+  editTodo,
+  toggleTodoById,
+  removeTodo,
+  cancelRemoveTodo,
+}: IProps) => {
   const [searchNote, setSearchNote] = useState('');
-  const [todos, setTodos] = useStateWithLocalStorage<Todo>({}, TODOS);
-  const [removedTodos, setRemovedTodos] = useState<Todo>({});
   const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
   const [editedTodo, setEditedTodo] = useState<TodoInfo | null>(null);
   const [filter, setFilter] = useState<Filters>(Filters.all);
@@ -83,48 +81,6 @@ export const TodoListPage = ({ onChangeMode }: IProps) => {
 
   const onCloseEditTodoModal = () => {
     setEditedTodo(null);
-  };
-
-  const createTodo = (todoInfo: TodoInfo) => {
-    const updatedTodoList = { ...todos };
-    updatedTodoList[todoInfo.id] = todoInfo;
-    setTodos(updatedTodoList);
-  };
-
-  const editTodo = (editedTodo: TodoInfo) => {
-    const updatedTodoList = { ...todos };
-    updatedTodoList[editedTodo.id] = editedTodo;
-    setTodos(updatedTodoList);
-  };
-
-  const toggleTodoById = (id: string) => {
-    const updatedTodo = todos[id];
-    if (updatedTodo) {
-      updatedTodo.active = !updatedTodo.active;
-      const updatedTodoList = { ...todos };
-      updatedTodoList[updatedTodo.id] = updatedTodo;
-      setTodos(updatedTodoList);
-    }
-  };
-
-  const removeTodo = (id: string) => {
-    const removedTodoInfo = todos[id];
-    if (removedTodoInfo) {
-      setRemovedTodos({ ...removedTodos, [id]: removedTodoInfo });
-      const updatedTodoList = { ...todos };
-      delete updatedTodoList[id];
-      setTodos(updatedTodoList);
-    }
-  };
-
-  const cancelRemoveTodo = (id: string) => {
-    const restoredTodoInfo = todos[id];
-    if (restoredTodoInfo) {
-      setTodos((prev) => ({ ...prev, [id]: restoredTodoInfo }));
-      const updatedRemoveTodoList = { ...removedTodos };
-      delete updatedRemoveTodoList[id];
-      setRemovedTodos(updatedRemoveTodoList);
-    }
   };
 
   const lastOrder: number = useMemo(() => {

@@ -1,6 +1,7 @@
 import { TodoItem } from '../../../entities/todoItem';
+import { ToggleTodo } from '../../../features/toggleTodo/ui/toggleTodo';
 import { Todo } from '../../../shared/api';
-import styles from '../styles/index.module.scss';
+import styles from '../styles/todoList.module.scss';
 
 interface IProps {
   todos: Todo;
@@ -19,10 +20,10 @@ export const TodoList = ({ todos, toggleTodoById, openEditTodoModal, removeTodo,
             key={todo.id}
             todo={todo}
             index={index}
-            toggleTodoById={toggleTodoById}
             openEditTodoModal={openEditTodoModal}
             removeTodo={removeTodo}
             cancelRemoveTodo={cancelRemoveTodo}
+            checkbox={<ToggleTodo todo={todo} toggleTodoById={toggleTodoById} />}
           />
         ))
       ) : (

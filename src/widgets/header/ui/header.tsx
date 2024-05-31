@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import styles from './../styles/index.module.scss';
+import styles from './../styles/header.module.scss';
 import { Title } from '../../../shared/ui/title';
 
 interface IProps {

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import styles from '../styles/index.module.scss';
+import styles from '../styles/todoForm.module.scss';
 import { Title } from '../../../shared/ui/title';
 import { InputText } from '../../../shared/ui/inputText';
 import { CustomButton } from '../../../shared/ui/customButton';
