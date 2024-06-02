@@ -1,1 +1,1 @@
-export * from './inputText';
+export { InputText } from './inputText';

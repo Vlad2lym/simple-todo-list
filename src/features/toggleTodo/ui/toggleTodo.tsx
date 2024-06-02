@@ -1,8 +1,8 @@
-import { TodoInfo } from '../../../shared/api';
-import { CustomCheckbox } from '../../../shared/ui/customCheckbox';
+import { Todo } from '@/entities/todo';
+import { CustomCheckbox } from '@/shared/ui/customCheckbox';
 
 interface IProps {
-  todo: TodoInfo;
+  todo: Todo;
   toggleTodoById: (id: string) => void;
 }
 

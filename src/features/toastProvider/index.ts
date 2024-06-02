@@ -1,1 +1,1 @@
-export * from './ui/toastProvider.tsx';
+export { ToastProvider } from './ui/toastProvider';

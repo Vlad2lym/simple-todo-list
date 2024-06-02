@@ -3,6 +3,18 @@
   margin: 0 auto;
 }
 
+.header__title {
+  padding: 40px 0 18px;
+  text-align: center;
+}
+
+.header__settings {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .header__input {
   width: 595px;
 }

@@ -1,1 +1,1 @@
-export * from './customButton';
+export { CustomButton } from './customButton';

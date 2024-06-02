@@ -1,10 +1,11 @@
-import { TodoItem } from '../../../entities/todoItem';
-import { ToggleTodo } from '../../../features/toggleTodo/ui/toggleTodo';
-import { Todo } from '../../../shared/api';
+import { EditTodoButton } from '@/features/editTodoButton';
+import { RemoveTodoButton } from '@/features/removeTodo-cancelRemoveTodo';
+import { ToggleTodo } from '@/features/toggleTodo';
+import { TodoItem, TodoMapById } from '@/entities/todo';
 import styles from '../styles/todoList.module.scss';
 
 interface IProps {
-  todos: Todo;
+  todos: TodoMapById;
   toggleTodoById: (id: string) => void;
   openEditTodoModal: (id: string) => void;
   removeTodo: (id: string) => void;
@@ -20,10 +21,11 @@ export const TodoList = ({ todos, toggleTodoById, openEditTodoModal, removeTodo,
             key={todo.id}
             todo={todo}
             index={index}
-            openEditTodoModal={openEditTodoModal}
-            removeTodo={removeTodo}
-            cancelRemoveTodo={cancelRemoveTodo}
             checkbox={<ToggleTodo todo={todo} toggleTodoById={toggleTodoById} />}
+            editTodoButton={<EditTodoButton idTodo={todo.id} openEditTodoModal={openEditTodoModal} />}
+            removeTodoButton={
+              <RemoveTodoButton todo={todo} removeTodo={removeTodo} cancelRemoveTodo={cancelRemoveTodo} />
+            }
           />
         ))
       ) : (

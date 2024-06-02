@@ -1,75 +1,38 @@
 import { useMemo, useState } from 'react';
-import { CreateTodoModal } from '../../features/createTodo';
-import { EditTodoModal } from '../../features/editTodo';
+import { TodoList } from '@/widgets/todoList';
+import { AddTodoButton } from '@/features/addTodoButton';
+import { CreateTodoModal } from '@/features/createTodo';
+import { DarkModeButton } from '@/features/darkModeButton';
+import { EditTodoModal } from '@/features/editTodo';
+import { FilterTodo, useManageFilterTodo } from '@/features/filterTodo';
+import { SearchTodoByTitle, useManageSearchTodoByTitle } from '@/features/searchTodoByTitle';
+import { ToastProvider } from '@/features/toastProvider';
+import { Todo, useManageTodo } from '@/entities/todo';
+import { Modal } from '@/shared/ui/modal';
+import { Title } from '@/shared/ui/title';
 import styles from './styles/todoListPage.module.scss';
-import { Header } from '../../widgets/header';
-import { Option } from '../../shared/api';
-import { CustomSelect } from '../../shared/ui/customSelect';
-import { InputText } from '../../shared/ui/inputText';
-import { TodoList } from '../../widgets/todoList';
-import { Todo, TodoInfo } from '../../shared/api';
-import { ToastProvider } from '../../features/toastProvider';
-import { DarkModeButton } from '../../features/darkModeButton';
-import { AddTodoButton } from '../../features/addTodoButton';
-import { Filters, filterOptions } from './api';
 
 interface IProps {
   onChangeMode: () => void;
-  todos: Todo;
-  createTodo: (todoInfo: TodoInfo) => void;
-  editTodo: (editedTodo: TodoInfo) => void;
-  toggleTodoById: (id: string) => void;
-  removeTodo: (id: string) => void;
-  cancelRemoveTodo: (id: string) => void;
 }
 
-export const TodoListPage = ({
-  onChangeMode,
-  todos,
-  createTodo,
-  editTodo,
-  toggleTodoById,
-  removeTodo,
-  cancelRemoveTodo,
-}: IProps) => {
-  const [searchNote, setSearchNote] = useState('');
+export const TodoListPage = ({ onChangeMode }: IProps) => {
   const [showCreateTodoModal, setShowCreateTodoModal] = useState(false);
-  const [editedTodo, setEditedTodo] = useState<TodoInfo | null>(null);
-  const [filter, setFilter] = useState<Filters>(Filters.all);
+  const [editedTodo, setEditedTodo] = useState<Todo | null>(null);
 
-  const onChangeFilter = (option: { value: Filters } & Omit<Option, 'value'>) => {
-    setFilter(Filters[option.value]);
-  };
+  const { todos, createTodo, editTodo, toggleTodoById, removeTodo, cancelRemoveTodo } = useManageTodo();
 
   const todosSortByOrder = useMemo(() => {
     return Object.fromEntries(Object.entries(todos).sort((a, b) => a[1].order - b[1].order));
   }, [todos]);
 
-  const filteredTodos = useMemo(() => {
-    if (filter === Filters.all) {
-      return todosSortByOrder;
-    } else if (filter === Filters.incomplete) {
-      return Object.fromEntries(Object.entries(todosSortByOrder).filter(([, todoInfo]) => todoInfo.active));
-    } else if (filter === Filters.complete) {
-      return Object.fromEntries(Object.entries(todosSortByOrder).filter(([, todoInfo]) => !todoInfo.active));
-    }
+  const { onChangeFilter, filteredTodos } = useManageFilterTodo(todosSortByOrder);
 
-    return todosSortByOrder;
-  }, [filter, todosSortByOrder]);
-
-  const searchedFilteredTodos = useMemo(() => {
-    if (!searchNote) {
-      return filteredTodos;
-    }
-    const lowerSearchNote = searchNote.toLowerCase();
-    return Object.fromEntries(
-      Object.entries(filteredTodos).filter(([, todoInfo]) => todoInfo.title.toLowerCase().includes(lowerSearchNote)),
-    );
-  }, [filteredTodos, searchNote]);
-
-  const onChangeSearchNote = (value: string) => {
-    setSearchNote(value);
-  };
+  const {
+    searchNote,
+    onChangeSearchNote,
+    searchedTodos: searchedFilteredTodos,
+  } = useManageSearchTodoByTitle(filteredTodos);
 
   const onCloseCreateTodoModal = () => {
     setShowCreateTodoModal(false);
@@ -96,17 +59,18 @@ export const TodoListPage = ({
   return (
     <>
       <div className={styles.wrapper}>
-        <Header titleText="TODO LIST">
-          <InputText
-            className={styles.headerInput}
-            placeholder="Search note..."
-            value={searchNote}
-            onChange={onChangeSearchNote}
-            searched
-          />
-          <CustomSelect className={styles.headerSelect} options={filterOptions} onChange={onChangeFilter} />
-          <DarkModeButton onChange={onChangeMode} />
-        </Header>
+        <div className={styles.header}>
+          <Title className={styles.headerTitle}>TODO LIST</Title>
+          <div className={styles.headerSettings}>
+            <SearchTodoByTitle
+              className={styles.headerInput}
+              searchNote={searchNote}
+              onChangeSearchNote={onChangeSearchNote}
+            />
+            <FilterTodo className={styles.headerSelect} onChangeFilter={onChangeFilter} />
+            <DarkModeButton onChange={onChangeMode} />
+          </div>
+        </div>
         <div className={styles.content}>
           <ToastProvider className={styles.contentToast} autoClose={5000}>
             <TodoList
@@ -120,19 +84,17 @@ export const TodoListPage = ({
           <AddTodoButton className={styles.contentAddButton} onClick={() => setShowCreateTodoModal(true)} />
         </div>
       </div>
-      <CreateTodoModal
-        onApply={createTodo}
-        onCancel={onCloseCreateTodoModal}
-        order={lastOrder + 1}
-        show={showCreateTodoModal}
-      />
-      <EditTodoModal
-        editedTodo={editedTodo}
-        onCancel={onCloseEditTodoModal}
-        onApply={editTodo}
-        show={!!editedTodo}
-        key={editedTodo?.id}
-      />
+      <Modal show={showCreateTodoModal} onClose={onCloseCreateTodoModal}>
+        <CreateTodoModal onApply={createTodo} onCancel={onCloseCreateTodoModal} order={lastOrder + 1} />
+      </Modal>
+      <Modal show={!!editedTodo} onClose={onCloseEditTodoModal}>
+        <EditTodoModal
+          editedTodo={editedTodo}
+          onCancel={onCloseEditTodoModal}
+          onApply={editTodo}
+          key={editedTodo?.id}
+        />
+      </Modal>
     </>
   );
 };

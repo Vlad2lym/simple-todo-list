@@ -1,1 +1,1 @@
-export * from './ui/editTodo';
+export { EditTodoModal } from './ui/editTodo';

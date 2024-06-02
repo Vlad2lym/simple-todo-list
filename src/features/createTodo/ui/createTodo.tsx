@@ -1,16 +1,15 @@
 import { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Modal, ModalProps } from '../../../shared/ui/modal';
-import { TodoForm } from '../../../widgets/todoForm';
-import { TodoInfo } from '../../../shared/api';
+import { Todo } from '@/entities/todo';
+import { TodoForm } from '@/entities/todoForm';
 
-interface IProps extends Pick<ModalProps, 'show'> {
-  onApply: (todoInfo: TodoInfo) => void;
+interface IProps {
+  onApply: (todoInfo: Todo) => void;
   onCancel: () => void;
   order: number;
 }
 
-export const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
+export const CreateTodoModal = ({ onApply, onCancel, order }: IProps) => {
   const [titleTodo, setTitleTodo] = useState('');
 
   const onChangeTitleTodo = (value: string) => {
@@ -22,7 +21,7 @@ export const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
       return;
     }
 
-    const todoInfo: TodoInfo = {
+    const todoInfo: Todo = {
       id: uuidv4(),
       title: titleTodo,
       active: true,
@@ -35,7 +34,7 @@ export const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
   }, [titleTodo, onApply, onCancel, order]);
 
   return (
-    <Modal show={show} onClose={onCancel}>
+    <>
       <TodoForm
         title="NEW NOTE"
         onCancel={onCancel}
@@ -43,6 +42,6 @@ export const CreateTodoModal = ({ onApply, onCancel, order, show }: IProps) => {
         inputValue={titleTodo}
         onChangeInput={onChangeTitleTodo}
       />
-    </Modal>
+    </>
   );
 };

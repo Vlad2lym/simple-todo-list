@@ -1,1 +1,1 @@
-export * from './hooks/useStateWithLocalStorage';
+export { useStateWithLocalStorage } from './hooks/useStateWithLocalStorage';

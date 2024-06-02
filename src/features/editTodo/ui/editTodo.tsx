@@ -1,15 +1,14 @@
 import { useCallback, useState } from 'react';
-import { Modal, ModalProps } from '../../../shared/ui/modal';
-import { TodoForm } from '../../../widgets/todoForm';
-import { TodoInfo } from '../../../shared/api';
+import { Todo } from '@/entities/todo';
+import { TodoForm } from '@/entities/todoForm';
 
-interface IProps extends Pick<ModalProps, 'show'> {
-  onApply: (todoInfo: TodoInfo) => void;
+interface IProps {
+  onApply: (todoInfo: Todo) => void;
   onCancel: () => void;
-  editedTodo: TodoInfo | null;
+  editedTodo: Todo | null;
 }
 
-export const EditTodoModal = ({ onApply, onCancel, editedTodo, show }: IProps) => {
+export const EditTodoModal = ({ onApply, onCancel, editedTodo }: IProps) => {
   const [titleTodo, setTitleTodo] = useState(editedTodo?.title ?? '');
 
   const onChangeTitleTodo = (value: string) => {
@@ -21,7 +20,7 @@ export const EditTodoModal = ({ onApply, onCancel, editedTodo, show }: IProps) =
       return;
     }
 
-    const todo: TodoInfo = {
+    const todo: Todo = {
       id: editedTodo.id,
       title: titleTodo,
       active: editedTodo.active,
@@ -33,7 +32,7 @@ export const EditTodoModal = ({ onApply, onCancel, editedTodo, show }: IProps) =
   }, [titleTodo, onApply, onCancel, editedTodo]);
 
   return (
-    <Modal onClose={onCancel} show={show}>
+    <>
       <TodoForm
         title="EDIT NOTE"
         onCancel={onCancel}
@@ -41,6 +40,6 @@ export const EditTodoModal = ({ onApply, onCancel, editedTodo, show }: IProps) =
         inputValue={titleTodo}
         onChangeInput={onChangeTitleTodo}
       />
-    </Modal>
+    </>
   );
 };

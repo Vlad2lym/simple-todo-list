@@ -1,4 +1,4 @@
-import addIcon from '../../../shared/images/icons/add-icon.svg';
+import addIcon from '@/shared/images/icons/add-icon.svg';
 import styles from './addTodoButton.module.scss';
 
 interface IProps {

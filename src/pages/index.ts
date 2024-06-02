@@ -1,1 +1,1 @@
-export * from './todoListPage/todoListPage';
+export { TodoListPage } from './todoListPage/todoListPage';

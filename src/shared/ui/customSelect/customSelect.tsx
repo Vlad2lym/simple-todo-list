@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import styles from './customSelect.module.scss';
-import arrowDown from '../../../shared/images/icons/arrow-down-icon.svg';
-import arrowUp from '../../../shared/images/icons/arrow-up-icon.svg';
 import { Option } from '../../api';
+import arrowDown from '../../images/icons/arrow-down-icon.svg';
+import arrowUp from '../../images/icons/arrow-up-icon.svg';
+import styles from './customSelect.module.scss';
 
 interface IProps {
   className?: string;
