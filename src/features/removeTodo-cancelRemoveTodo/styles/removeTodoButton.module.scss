@@ -1,0 +1,7 @@
+.remove-btn {
+  background-image: url('@/shared/images/icons/delete-icon.svg');
+
+  &:hover {
+    background-image: url('@/shared/images/icons/delete-active-icon.svg');
+  }
+}

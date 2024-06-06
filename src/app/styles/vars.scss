@@ -1,0 +1,13 @@
+:root {
+  --app-bg-color: #f7f7f7;
+  --primary-color: rgba(108, 99, 255, 1);
+  --primary-color-active: rgba(88, 80, 221, 1);
+  --text-color: #252525;
+  --text-color-done: rgba(37, 37, 37, 0.5);
+  --search-icon: url('@/shared/images/icons/search-icon-light.svg');
+  --mode-button-icon: url('@/shared/images/icons/dark-mode-icon.svg');
+  --empty-list-img: url('@/shared/images/img/empty-list-light.svg');
+  --input-border-color: #6c63ff;
+  --placeholder-color: #c3c1e5;
+  --outline-color: rgba(108, 99, 255, 0.4);
+}

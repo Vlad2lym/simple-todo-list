@@ -1,0 +1,11 @@
+.dark-mode {
+  --app-bg-color: #252525;
+  --text-color: #f7f7f7;
+  --text-color-done: rgba(255, 255, 255, 0.5);
+  --search-icon: url('@/shared/images/icons/search-icon-dark.svg');
+  --mode-button-icon: url('@/shared/images/icons/light-mode-icon.svg');
+  --empty-list-img: url('@/shared/images/img/empty-list-dark.svg');
+  --input-border-color: #f7f7f7;
+  --placeholder-color: #666666;
+  --outline-color: rgba(255, 255, 255, 0.4);
+}

@@ -1,0 +1,7 @@
+.edit-btn {
+  background-image: url('@/shared/images/icons/edit-icon.svg');
+
+  &:hover {
+    background-image: url('@/shared/images/icons/edit-active-icon.svg');
+  }
+}
