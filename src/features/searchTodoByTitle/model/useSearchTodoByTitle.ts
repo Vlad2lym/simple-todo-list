@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { TodoMapById } from '@/entities/todo';
 
-export const useManageSearchTodoByTitle = (todos: TodoMapById) => {
+export const useSearchTodoByTitle = (todos: TodoMapById) => {
   const [searchNote, setSearchNote] = useState('');
 
   const onChangeSearchNote = (value: string) => {

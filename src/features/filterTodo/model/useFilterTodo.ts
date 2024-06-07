@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { TodoMapById } from '@/entities/todo';
 import { FilterOption, Filters } from '../api/filterTodo';
 
-export const useManageFilterTodo = (todos: TodoMapById) => {
+export const useFilterTodo = (todos: TodoMapById) => {
   const [filter, setFilter] = useState<Filters>(Filters.all);
 
   const onChangeFilter = (option: FilterOption) => {

@@ -4,8 +4,8 @@ import { AddTodoButton } from '@/features/addTodoButton';
 import { CreateTodoModal } from '@/features/createTodo';
 import { DarkModeButton } from '@/features/darkModeButton';
 import { EditTodoModal } from '@/features/editTodo';
-import { FilterTodo, useManageFilterTodo } from '@/features/filterTodo';
-import { SearchTodoByTitle, useManageSearchTodoByTitle } from '@/features/searchTodoByTitle';
+import { FilterTodo, useFilterTodo } from '@/features/filterTodo';
+import { SearchTodoByTitle, useSearchTodoByTitle } from '@/features/searchTodoByTitle';
 import { ToastProvider } from '@/features/toastProvider';
 import { Todo, useManageTodo } from '@/entities/todo';
 import { Modal } from '@/shared/ui/modal';
@@ -26,13 +26,9 @@ export const TodoListPage = ({ onChangeMode }: IProps) => {
     return Object.fromEntries(Object.entries(todos).sort((a, b) => a[1].order - b[1].order));
   }, [todos]);
 
-  const { onChangeFilter, filteredTodos } = useManageFilterTodo(todosSortByOrder);
+  const { onChangeFilter, filteredTodos } = useFilterTodo(todosSortByOrder);
 
-  const {
-    searchNote,
-    onChangeSearchNote,
-    searchedTodos: searchedFilteredTodos,
-  } = useManageSearchTodoByTitle(filteredTodos);
+  const { searchNote, onChangeSearchNote, searchedTodos: searchedFilteredTodos } = useSearchTodoByTitle(filteredTodos);
 
   const onCloseCreateTodoModal = () => {
     setShowCreateTodoModal(false);
