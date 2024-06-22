@@ -2,13 +2,13 @@ import styles from '../styles/editTodoButton.module.scss';
 
 interface IProps {
   idTodo: string;
-  openEditTodoModal: (id: string) => void;
+  onClick: (id: string) => void;
 }
 
-export const EditTodoButton = ({ idTodo, openEditTodoModal }: IProps) => {
+export const EditTodoButton = ({ idTodo, onClick }: IProps) => {
   return (
     <>
-      <button className={styles.editBtn} onClick={() => openEditTodoModal(idTodo)} />
+      <button className={styles.editBtn} onClick={() => onClick(idTodo)} />
     </>
   );
 };

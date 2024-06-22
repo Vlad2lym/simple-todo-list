@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cancel remove Btn 1`] = `
+exports[`should cancel remove todo on click 1`] = `
 <div
   class="cancelBtnWrapper"
-  data-testid="cancelRemoveBtn"
+  data-testid="dataTestId"
 >
   <button>
     <div

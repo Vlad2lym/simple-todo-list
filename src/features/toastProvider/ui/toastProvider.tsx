@@ -9,7 +9,6 @@ interface IProps {
 export const ToastProvider = ({ children, className, autoClose }: IProps) => {
   return (
     <>
-      {children}
       <ToastContainer
         className={className}
         autoClose={autoClose}
@@ -20,6 +19,7 @@ export const ToastProvider = ({ children, className, autoClose }: IProps) => {
         hideProgressBar
         pauseOnFocusLoss={false}
       />
+      {children}
     </>
   );
 };

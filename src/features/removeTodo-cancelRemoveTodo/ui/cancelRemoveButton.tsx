@@ -7,12 +7,14 @@ interface IProps {
   title: string;
 }
 
+export const dataTestId = 'dataTestId';
+
 export const CancelRemoveButton = ({ className, onClick, style, title }: IProps) => {
   return (
     <div
       className={className ? `${styles.cancelBtnWrapper} ${className}` : styles.cancelBtnWrapper}
       style={style}
-      data-testid="cancelRemoveBtn"
+      data-testid={dataTestId}
     >
       <button onClick={onClick}>
         <div className={styles.cancelBtnTimer}>

@@ -1,5 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { RemoveTodoButton } from '../ui/removeTodoButton';
+import { jest } from '@jest/globals';
+import userEvent from '@testing-library/user-event';
 
 const todo = {
   id: '1',
@@ -8,21 +10,16 @@ const todo = {
   order: 1,
 };
 
-let removeTodoId = null;
-let cancelRemoveTodoId = null;
+const removeTodo = jest.fn();
+const cancelRemoveTodo = jest.fn();
 
-const removeTodo = (id) => {
-  removeTodoId = id;
-};
-
-const cancelRemoveTodo = (id) => {
-  cancelRemoveTodoId = id;
-};
-
-test('remove todo Btn', async () => {
+it('should remove todo on click', async () => {
   render(<RemoveTodoButton todo={todo} removeTodo={removeTodo} cancelRemoveTodo={cancelRemoveTodo} />);
+
   const removeBtn = screen.getByRole('button');
-  expect(removeTodoId).toBeNull();
-  fireEvent.click(removeBtn);
-  expect(removeTodoId).toBe('1');
+  expect(removeTodo).not.toHaveBeenCalled();
+  await userEvent.click(removeBtn);
+  expect(removeTodo).toHaveBeenCalledWith('1');
+  expect(removeTodo).toHaveBeenCalledTimes(1);
+  // expect(await screen.findByText(/undo/i)).toBeInTheDocument();
 });

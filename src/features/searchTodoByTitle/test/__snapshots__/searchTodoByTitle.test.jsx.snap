@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should search todo by title 1`] = `
+<input
+  class="textFieldInput"
+  placeholder="Search note..."
+  type="text"
+  value="title"
+/>
+`;

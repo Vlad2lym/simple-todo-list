@@ -3,13 +3,13 @@ import { useFilterTodo } from '../model/useFilterTodo';
 import { Filters } from '../api/filterTodo';
 
 const todo = {
-  ['1']: {
+  1: {
     id: '1',
     title: 'title1',
     active: true,
     order: 1,
   },
-  ['2']: {
+  2: {
     id: '2',
     title: 'title2',
     active: false,
@@ -18,32 +18,22 @@ const todo = {
 };
 
 describe('useFilterTodo', () => {
-  test('filter-all', () => {
+  it('should return full collection', () => {
     const { result } = renderHook(useFilterTodo, { initialProps: todo });
-    const { filteredTodos } = result.current;
-    const keys = Object.keys(filteredTodos);
-    expect(keys).toHaveLength(2);
-    expect(keys).toEqual(['1', '2']);
-    expect(filteredTodos).toEqual(todo);
+    expect(result.current.filteredTodos).toEqual(todo);
   });
 
-  test('filter-complete', () => {
+  it('should return complete collection', async () => {
     const { result } = renderHook(useFilterTodo, { initialProps: todo });
-    act(() => result.current.onChangeFilter({ id: 2, title: 'Complete', value: Filters.complete }));
+    await act(async () => result.current.onChangeFilter({ id: 2, title: 'Complete', value: Filters.complete }));
     const { filteredTodos } = result.current;
-    const keys = Object.keys(filteredTodos);
-    expect(keys).toHaveLength(1);
-    expect(keys).toEqual(['2']);
-    expect(filteredTodos['2'].active).toBe(false);
+    expect({ ...filteredTodos['2'] }).toEqual(todo['2']);
   });
 
-  test('filter-incomplete', () => {
+  it('should return incomplete collection', async () => {
     const { result } = renderHook(useFilterTodo, { initialProps: todo });
-    act(() => result.current.onChangeFilter({ id: 3, title: 'Incomplete', value: Filters.incomplete }));
+    await act(async () => result.current.onChangeFilter({ id: 3, title: 'Incomplete', value: Filters.incomplete }));
     const { filteredTodos } = result.current;
-    const keys = Object.keys(filteredTodos);
-    expect(keys).toHaveLength(1);
-    expect(keys).toEqual(['1']);
-    expect(filteredTodos['1'].active).toBe(true);
+    expect({ ...filteredTodos['1'] }).toEqual(todo['1']);
   });
 });
