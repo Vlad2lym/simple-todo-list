@@ -6,6 +6,7 @@ exports[`should add todo on click 1`] = `
 >
   <button
     class="addTodoButton"
+    data-testid="test_AddTodoBtn"
   >
     <img />
   </button>

@@ -3,5 +3,6 @@
 exports[`should change app mode on click 1`] = `
 <button
   class="darkModeButton"
+  data-testid="test_DarkModeBtn"
 />
 `;

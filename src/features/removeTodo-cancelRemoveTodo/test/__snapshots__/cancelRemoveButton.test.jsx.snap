@@ -3,7 +3,7 @@
 exports[`should cancel remove todo on click 1`] = `
 <div
   class="cancelBtnWrapper"
-  data-testid="dataTestId"
+  data-testid="test_CancelRemoveBtn"
 >
   <button>
     <div
