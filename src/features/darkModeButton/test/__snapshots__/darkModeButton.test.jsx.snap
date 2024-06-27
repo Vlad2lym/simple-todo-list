@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should change app mode on click 1`] = `
+<button
+  class="darkModeButton"
+  data-testid="test_DarkModeBtn"
+/>
+`;

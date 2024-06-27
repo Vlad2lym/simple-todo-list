@@ -22,7 +22,7 @@ export const TodoList = ({ todos, toggleTodoById, openEditTodoModal, removeTodo,
             todo={todo}
             index={index}
             checkbox={<ToggleTodo todo={todo} toggleTodoById={toggleTodoById} />}
-            editTodoButton={<EditTodoButton idTodo={todo.id} openEditTodoModal={openEditTodoModal} />}
+            editTodoButton={<EditTodoButton idTodo={todo.id} onClick={openEditTodoModal} />}
             removeTodoButton={
               <RemoveTodoButton todo={todo} removeTodo={removeTodo} cancelRemoveTodo={cancelRemoveTodo} />
             }

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should add todo on click 1`] = `
+<div
+  class="addTodoArea"
+>
+  <button
+    class="addTodoButton"
+    data-testid="test_AddTodoBtn"
+  >
+    <img />
+  </button>
+</div>
+`;
